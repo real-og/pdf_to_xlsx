@@ -29,9 +29,9 @@ async def send_welcome(mes: types.Message):
     if mes.content_type in ['document']:
         try:
             
-            await mes.document.download(destination_file=INPUT_PDF)
-            parser.parse_pdf_to_xlsx(INPUT_PDF)
-            await mes.answer_document(types.InputFile(OUTPUT_XLSX))
+            await mes.document.download(destination_file=mes.document.file_name)
+            parser.parse_pdf_to_xlsx(mes.document.file_name, mes.document.file_name.replace('.pdf', '.xlsx'))
+            await mes.answer_document(types.InputFile(mes.document.file_name.replace('.pdf', '.xlsx')))
 
         except FileIsTooBig:
             

@@ -7,9 +7,7 @@ from openpyxl import Workbook
 from openpyxl.utils import get_column_letter
 
 
-# --- Захардкоженные имена ---
-# INPUT_PDF = "waybill.pdf"
-OUTPUT_XLSX = "waybill.xlsx"
+
 
 HEADERS = [
     "Артикул",
@@ -253,13 +251,13 @@ def write_xlsx(items: List[List[str]], out_path: str) -> None:
     wb.save(out_path)
 
 
-def parse_pdf_to_xlsx(input_pdf):
+def parse_pdf_to_xlsx(input_pdf, out_name):
     if not os.path.exists(input_pdf):
         raise FileNotFoundError(f"Не найден '{input_pdf}' в текущей папке: {os.getcwd()}")
 
     items = extract_items(input_pdf)
-    write_xlsx(items, OUTPUT_XLSX)
-    print(f"OK: {input_pdf} -> {OUTPUT_XLSX} (rows: {len(items)})")
+    write_xlsx(items, out_name)
+    print(f"OK: {input_pdf} -> {out_name} (rows: {len(items)})")
 
 
 
