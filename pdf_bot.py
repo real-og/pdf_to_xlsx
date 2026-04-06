@@ -42,7 +42,7 @@ async def send_welcome(mes: types.Message):
 
             if '.xlsx' in mes.document.file_name:
                 file_name_first = mes.document.file_name
-                file_name_second = mes.document.file_name[:-4] + '_modified.xlsx'
+                file_name_second = mes.document.file_name[:-5] + '_modified.xlsx'
                 adding_price.enrich_ozon_prices_xlsx(mes.document.file_name, exchange_rate.get_exchange_rate())
                 await mes.answer_document(types.InputFile(file_name_second))
                 delete_file(file_name_second)
