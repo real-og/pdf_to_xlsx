@@ -6,6 +6,16 @@ import logging
 from aiogram.utils.exceptions import FileIsTooBig
 from config import BOT_TOKEN
 import parser
+import adding_price
+import exchange_rate
+import os
+
+
+def delete_file(file_name):
+    file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), file_name)
+
+    if os.path.exists(file_path):
+        os.remove(file_path)
 
 
 logging.basicConfig(level=logging.WARNING)
@@ -28,10 +38,19 @@ async def send_welcome(message: types.Message):
 async def send_welcome(mes: types.Message):
     if mes.content_type in ['document']:
         try:
-            
             await mes.document.download(destination_file=mes.document.file_name)
-            parser.parse_pdf_to_xlsx(mes.document.file_name, mes.document.file_name.replace('.pdf', '.xlsx'))
-            await mes.answer_document(types.InputFile(mes.document.file_name.replace('.pdf', '.xlsx')))
+
+            if '.xlsx' in mes.document.file_name:
+                file_name_first = mes.document.file_name
+                file_name_second = mes.document.file_name[:-4] + '_modified.xlsx'
+                adding_price.enrich_ozon_prices_xlsx(mes.document.file_name, exchange_rate.get_exchange_rate())
+                await mes.answer_document(types.InputFile(file_name_second))
+                delete_file(file_name_second)
+                delete_file(file_name_first)
+            else:
+
+                parser.parse_pdf_to_xlsx(mes.document.file_name, mes.document.file_name.replace('.pdf', '.xlsx'))
+                await mes.answer_document(types.InputFile(mes.document.file_name.replace('.pdf', '.xlsx')))
 
         except FileIsTooBig:
             
