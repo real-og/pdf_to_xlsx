@@ -4,7 +4,7 @@ from aiogram import Bot, Dispatcher
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 import logging
 from aiogram.utils.exceptions import FileIsTooBig
-from config import BOT_TOKEN
+from config import BOT_TOKEN, PROXY
 import parser
 import adding_price
 import exchange_rate
@@ -26,7 +26,7 @@ OUTPUT_XLSX = "waybill.xlsx"
 
 storage = MemoryStorage()
 
-bot = Bot(token=BOT_TOKEN, parse_mode="HTML")
+bot = Bot(token=BOT_TOKEN, parse_mode="HTML", proxy=PROXY)
 dp = Dispatcher(bot, storage=storage)
 
 @dp.message_handler(commands=['start'], state="*")
